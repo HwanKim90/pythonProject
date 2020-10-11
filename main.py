@@ -1,42 +1,44 @@
 import pygame
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED
-from checkers.game import Game
 
+# setup display
+pygame.init()
+WIDTH, HEIGHT = 800, 500
+win = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Hangman Game!")
+
+# laod image
+images = []
+for i in range(7):
+    image = pygame.image.load("images/hangman" +str(i) + ".png")
+    images.append(image)
+
+# game variables
+hangman_status = 0
+
+# colors
+WHITE = (255, 255, 255)
+
+# setup game loop
 FPS = 60
+clock = pygame.time.Clock()
+run = True
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Checkers')
+while run:
+    clock.tick(FPS)
 
-def get_row_col_from_mouse(pos):
-    x, y = pos
-    row = y // SQUARE_SIZE
-    col = x // SQUARE_SIZE
-    return row, col
+    win.fill(WHITE)
+    win.blit(images[hangman_status], (150, 100))
+    pygame.display.update()
 
-def main():
-    run = True
-    clock = pygame.time.Clock()
-    game = Game(WIN)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            print(pos)
 
-
-
-
-    while run:
-        clock.tick(FPS)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row, col = get_row_col_from_mouse(pos)
-                if game.turn == RED:
-                    game.select(row, col)
+pygame.quit()
 
 
-        game.update()
 
-    pygame.quit()
 
-main()
